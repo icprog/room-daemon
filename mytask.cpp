@@ -17,7 +17,6 @@ MyTask::MyTask(QObject *parent) : QObject(parent)
             QFile::remove("/daemon.txt");
         }
     }
-    carIP = getCarIP();
     ztpm = new ZTPManager(6600,QHostAddress("224.102.228.41"));
     connect(ztpm,SIGNAL(readyRead()),this,SLOT(OnReadZTP()));
     connect(&timer,SIGNAL(timeout()),this,SLOT(OnTimeout()));
@@ -36,7 +35,7 @@ void MyTask::OnReadZTP()
 //    qDebug("daemon recv >>>");
 //    ztp.print();
 //    qDebug("daemon recv <<<");
-    if(ztp.getPara("T") == "Heart" && ztp.getPara("CarIP") == carIP)
+    if(ztp.getPara("T") == "Heart" && ztp.getPara("CarIP") == getCarIP())
     {
         timer.stop();
         timer.start(15000);
